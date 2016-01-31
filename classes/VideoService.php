@@ -338,6 +338,18 @@ class VideoService {
 				'https'	=> 'http://www.youtube.com/oembed?scheme=https&url=%1$s&width=%2$d&maxwidth=%2$d'
 			]
 		],
+		'livecodingtv' => [
+			'embed'			=> '<iframe src="https://www.livecoding.tv/%1$s/embed" width="%2$d" height="%3$d" frameborder="0" allowfullscreen="true"></iframe>',
+			'default_width'	=> 640,
+			'default_ratio'	=> 1.77777777777778, // (16 / 9)
+			'https_enabled'	=> true,
+			'url_regex'		=> [
+				'#livecoding\.tv/([\d\w-]+)(?:/\S+?)?#is'
+			],
+			'id_regex'		=> [
+				'#^([\d\w-]+)$#is'
+			]
+		],
 		'youtubeplaylist' => [
 			'embed'			=> '<iframe src="//www.youtube.com/embed/videoseries?list=%1$s&%4$s" width="%2$d" height="%3$d" frameborder="0" allowfullscreen="true"></iframe>',
 			'default_width'	=> 640,
