@@ -1,35 +1,48 @@
-{{ {{TNTN|Extension}}
+{{TNT|Extension
 |name        = EmbedVideo
-|license     = {{EL|MIT}}
+|license     = MIT
 |status      = stable
 |type        = parser function
 |author      = Alexia E. Smith ([[User:Alexia E. Smith|Alexia E. Smith]]), Andrew Whitworth ([[User:Whiteknight|Whiteknight]]), Jim R. Wilson ([[User:Jimbojw|Jimbojw]]), and Mohammad Derakhshani ([[User:Mderakhs|Mderakhs]])
-|version     = 2.2.8
-|update      = 2015-10-19
-|mediawiki   = 1.19+
+|version     = 2.4.1
+|update      = 2016-08-30
+|mediawiki   = 1.25+
 |php         = 5.4+(5.3 up to EmbedVideo 2.2.1)
-|download    = {{ {{TNTN|GithubDownload}} |Alexia|mediawiki-embedvideo}}
+|download    = {{TNT|GithubDownload|HydraWiki|mediawiki-embedvideo}}
 |hook1       = ParserFirstCallInit
 |description = Adds a parser function called <tt>#ev</tt> for embedding video clips from popular video sharing services.
 |example     = [http://help.gamepedia.com/Extension:EmbedVideo/Example Gamepedia Help Wiki]
+|vagrant-role      = embedvideo
 }}
 
-{{warning|Please update your installed copies of EmbedVideo to version 2.2.5 or higher if you are running previous versions.  There are XSS flaws present in version 2.2.4 and earlier.  Please see the download link below under [[#Installation]].}}
+The '''EmbedVideo''' Extension is a MediaWiki extension which adds a parser function called <tt>#ev</tt> for embedding video clips from over 24 popular video sharing services in multiple languages and countries.  It also adds video and audio media handlers to support transforming standard <nowiki>[[File:Example.mp4]]</nowiki> file links into embedded HTML5 <nowiki><video></nowiki> and <nowiki><audio></nowiki> tags.
 
-The '''EmbedVideo''' Extension is a MediaWiki extension which adds a parser function called <tt>#ev</tt> for embedding video clips from over 24 popular video sharing services in multiple languages and countries.
-
-;Project Homepage: [https://github.com/Alexia/mediawiki-embedvideo Documentation at Github]
-;Source Code: [https://github.com/Alexia/mediawiki-embedvideo Source code at Github]
-;Bugs:[https://github.com/Alexia/mediawiki-embedvideo/issues issues at Github]
+;Project Homepage: [https://github.com/HydraWiki/mediawiki-embedvideo Documentation at Github]
+;Source Code: [https://github.com/HydraWiki/mediawiki-embedvideo Source code at Github]
+;Bugs:[https://github.com/HydraWiki/mediawiki-embedvideo/issues issues at Github]
 ;Licensing: EmbedVideo is released under [http://www.opensource.org/licenses/mit-license.php The MIT License].
 
 <span style="font-weight: bold; color: darkred;">Notice:</span> As of the 2.x series the EmbedVideo extension has a new maintainer and an entirely rewritten code base.  It retains backwards compatibility with EmbedVideo 1.0 and EmbedVideoPlus.
 
 ==Installation==
 
-{{ {{TNTN|ExtensionInstall}}|registration=yes |download-link=[https://github.com/Alexia/mediawiki-embedvideo/archive/v2.2.8.zip Download]}}
+{{TNT|ExtensionInstall
+ |registration=yes
+ |download-link=[https://github.com/HydraWiki/mediawiki-embedvideo/archive/v2.4.1.zip Download]
+}}
 
 ==Usage==
+
+=== Media Handler ===
+For locally uploaded content the process for displaying it on a page is the same as an image.  [https://www.mediawiki.org/wiki/Help:Images#Syntax See the image syntax documentation] on MediaWiki.org for complete reference on this feature.
+
+This example would display a video in page using a HTML5 `<video>` tag.
+
+<pre><nowiki>[[File:Example.mp4]]</nowiki></pre>
+
+To specify the start and end timestamps in the media use the start and end parameters.  The timestamp can be formatted as one of: ss, :ss, mm:ss, hh:mm:ss, or dd:hh:mm:ss.
+
+<pre><nowiki>[[File:Example.mp4|start=2|end=6]]</nowiki></pre>
 
 === Tags ===
 
@@ -42,6 +55,7 @@ The EmbedVideo parser function expects to be called in any of the following ways
 * <code><nowiki>{{#ev:service|id|dimensions|alignment|description}}</nowiki></code>
 * <code><nowiki>{{#ev:service|id|dimensions|alignment|description|container}}</nowiki></code>
 * <code><nowiki>{{#ev:service|id|dimensions|alignment|description|container|urlargs}}</nowiki></code>
+* <code><nowiki>{{#ev:service|id|dimensions|alignment|description|container|urlargs|autoresize}}</nowiki></code>
 
 However, if needed optional arguments may be left blank by not putting anything between the pipes:
 * <code><nowiki>{{#ev:service|id|||description}}</nowiki></code>
@@ -81,9 +95,9 @@ Videos can easily be embedded with the <nowiki><embedvideo></embedvideo></nowiki
 :Examples: <tt>480</tt>, <tt>480x320</tt>, <tt>x320</tt>.  If the height is not provided it will be calculated automatically from the width and service default ratio.
 :Some services such as ''Gfycat'' do not have standard heights and should be specified for each embed.  <tt>$wgEmbedVideoDefaultWidth</tt> can be set in <tt>LocalSettings.php</tt> to override the default width.
 |-
-| <code>alignment="<nowiki>[left|center|right]</nowiki>"</code>
+| <code>alignment="<nowiki>[left|center|right|inline]</nowiki>"</code>
 | '''Required:''' no, '''Default:''' <tt>none</tt>
-:Align the placement of the video either to the left, centered, or to the right.
+:Align the placement of the video either to the left, centered, or to the right. Inline will allow multiple videos to display side by side without forced line breaks.
 |-
 | <code>description="<nowiki>[wiki text]</nowiki>"</code>
 | '''Required:''' no, '''Default:''' <tt>none</tt>
@@ -97,15 +111,19 @@ Videos can easily be embedded with the <nowiki><embedvideo></embedvideo></nowiki
 | <code>urlargs="<nowiki>modestbranding=1&version=3</nowiki>"</code>
 | '''Required:''' no, '''Default:''' <tt>none</tt>
 :Allows extra URL arguments to be appended to the generated embed URL.  This is useful for obscure options only supported on one service.
+|-
+| <code>autoresize="<nowiki>false</nowiki>"</code>
+| '''Required:''' no, '''Default:''' <tt>true</tt>
+:Automatically resize videos when their size will cause them to break outside of their container element.
 |}
 
 === Examples ===
 
 [[File:EmbedVideoExample1.jpg|thumb|Example #1]]
 
-For example, a video from YouTube use the 'youtube' service selector enter either the raw ID:
+For example, a video from YouTube uses the 'youtube' service selector. You can specify either the raw ID:
 <pre>{{#ev:youtube|pSsYTj9kCHE}}</pre>
-Or the full URL:
+Or specify the full URL:
 <pre>{{#ev:youtube|https://www.youtube.com/watch?v=pSsYTj9kCHE}}</pre>
 
 
@@ -124,12 +142,16 @@ For YouTube to have the video start at a specific time code utilize the urlargs(
 <pre>https://www.youtube.com/watch?v=pSsYTj9kCHE&start=76</pre>
 <pre>{{#ev:youtube|https://www.youtube.com/watch?v=pSsYTj9kCHE|||||start=76}}</pre>
 
+URL arguments can be used to chop up a video and loop it:
+<pre>https://www.youtube.com/watch?v=pSsYTj9kCHE&start=160&end=180&loop=1</pre>
+<pre>{{#ev:youtube|https://www.youtube.com/watch?v=pSsYTj9kCHE|||||start=160&end=180&loop=1}}</pre>
+
 === Supported Services ===
 
 As of version 2.x, EmbedVideo supports embedding video content from the following services:
 {| class="wikitable"
 |-
-! Site 
+! Site
 ! colspan="2"|Service Name(s)
 ! ID Example
 ! URL Example(s)
@@ -151,22 +173,27 @@ As of version 2.x, EmbedVideo supports embedding video content from the followin
 | <nowiki>RocketBear</nowiki>
 | <nowiki>https://beam.pro/RocketBear</nowiki>
 |-
-! [http://www.bing.com/videos/ Bing] 
+! [http://www.bing.com/videos/ Bing]
 | colspan="2"|<tt>bing</tt>
 | <nowiki>31ncp9r7l</nowiki>
 | <nowiki>http://www.bing.com/videos/watch/video/adorable-cats-attempt-to-eat-invisible-tuna/31ncp9r7l</nowiki>
 |-
-! [http://www.blip.tv/ Blip.tv] 
+! [http://www.blip.tv/ Blip.tv]
 | colspan="2"|<tt>blip</tt> - Blip requires the full URL to the video page and does not accept the raw ID.
-| 
+|
 |<nowiki>http://blip.tv/vinylrewind/review-6864612</nowiki>
 |-
-! [http://www.collegehumor.com/ CollegeHumor] 
+! [https://media.ccc.de/ C3TV]
+| colspan="2"|<tt>mediacccde</tt>
+| <nowiki>32c3-7305-quantum_cryptography</nowiki>
+| <nowiki>https://media.ccc.de/v/32c3-7305-quantum_cryptography</nowiki>
+|-
+! [http://www.collegehumor.com/ CollegeHumor]
 | colspan="2"|<tt>collegehumor</tt>
 | <nowiki>6875289</nowiki>
 | <nowiki>http://www.collegehumor.com/video/6875289/batman-says-his-goodbyes</nowiki>
 |-
-! [http://www.dailymotion.com/ Dailymotion] 
+! [http://www.dailymotion.com/ Dailymotion]
 | colspan="2"|<tt>dailymotion</tt>
 | <nowiki>x1adiiw_archer-waking-up-as-h-jon-benjamin_shortfilms</nowiki>
 | <nowiki>http://www.dailymotion.com/video/x1adiiw_archer-waking-up-as-h-jon-benjamin_shortfilms</nowiki>
@@ -178,12 +205,12 @@ As of version 2.x, EmbedVideo supports embedding video content from the followin
 |-
 ! [http://www.divshare.com Div Share]
 | colspan="2"|<tt>divshare</tt>
-| 
+|
 |
 |-
 ! [http://edutopia.org Edutopia]
 | colspan="2"|Edutopia content moved to YouTube.  Please use the youtube service selector below.
-| 
+|
 |
 |-
 ! [http://www.funnyordie.com/ FunnyOrDie]
@@ -200,6 +227,11 @@ As of version 2.x, EmbedVideo supports embedding video content from the followin
 | colspan="2"|<tt>hitbox</tt>
 | <nowiki>Washuu</nowiki>
 | <nowiki>http://www.hitbox.tv/Washuu</nowiki>
+|-
+! [https://www.jwplayer.com/ JW Player]
+| colspan="2"|<tt>jwplayer</tt>
+| <nowiki>cr5d8nbu-8ZpoNmmJ</nowiki>
+| <nowiki>https://content.jwplatform.com/players/cr5d8nbu-8ZpoNmmJ.html</nowiki>
 |-
 ! [http://www.kickstarter.com/ Kickstarter]
 | colspan="2"|<tt>kickstarter</tt>
@@ -231,6 +263,11 @@ As of version 2.x, EmbedVideo supports embedding video content from the followin
 | <nowiki>bruce_aylward_humanity_vs_ebola_the_winning_strategies_in_a_terrifying_war</nowiki>
 | <nowiki>http://www.ted.com/talks/bruce_aylward_humanity_vs_ebola_the_winning_strategies_in_a_terrifying_war</nowiki>
 |-
+! [https://tubitv.com Tubi TV]
+| colspan="2"|<tt>tubitv</tt>
+| <nowiki>318409</nowiki>
+| <nowiki>http://tubitv.com/video/318409</nowiki>
+|-
 ! [http://www.tudou.com/ Tudou]
 | colspan="2"|<tt>tudou</tt>
 | <nowiki>mfQXfumwiew</nowiki>
@@ -244,7 +281,7 @@ As of version 2.x, EmbedVideo supports embedding video content from the followin
 |-
 ! [http://89.160.51.62/recordme/spelain.htm Videomaten]
 | colspan="2"|<tt>videomaten</tt>
-| 
+|
 |
 |-
 ! [http://www.vimeo.com Vimeo]
@@ -285,66 +322,109 @@ As of version 2.x, EmbedVideo supports embedding video content from the followin
 ! Description
 |--
 | $wgEmbedVideoMinWidth
-| 
+|
 | Integer - Minimum width of video players.  Widths specified below this value will be automatically bounded to it.
 |--
 | $wgEmbedVideoMaxWidth
-| 
+|
 | Integer - Maximum width of video players.  Widths specified above this value will be automatically bounded to it.
 |--
 | $wgEmbedVideoDefaultWidth
-| 
+|
 | Integer - Globally override the default width of video players.  When not set this uses the video service's default width which is typically 640 pixels.
+|--
+| $wgFFmpegLocation
+| /usr/bin/ffmpeg
+| String - Set the location of the ffmpeg binary.
+|--
+| $wgFFprobeLocation
+| /usr/bin/ffprobe
+| String - Set the location of the ffprobe binary.
 |}
 
 ==Patch Notes==
-===v2.2.8===
-* Support for Daum TVPot
- * https://github.com/Alexia/mediawiki-embedvideo/pull/38
-* Fix for URL arguments for youtube and youtubeplaylist.
- * https://github.com/Alexia/mediawiki-embedvideo/pull/40
+; v2.4.1
+* Merged Sophivorus' improvements and fixes.
+** Support for TubiTV.com with the tubitv service identifier.
+** Fixed vimeo aspect ratio.
+** Fixed dailymotion ID regex.
+* Fixed error messages being double parsed.
+
+; v2.4.0
+* New media handlers to embed locally uploaded video and audio files.
+** Requires ffmpeg and ffprobe binaries to be installed.
+** Uses HTML5 <nowiki><video></nowiki> and <nowiki><audio></nowiki> tags.
+* Two new settings:
+** $wgFFmpegLocation - Set the location of the ffmpeg binary.
+** $wgFFprobeLocation - Set the location of the ffprobe binary.
+
+; v2.3.3
+* Support for JW Player.
+
+; v2.3.2
+* Fix auto resize breaking when leaving full screen.
+
+; v2.3.1
+* Fixed issue #54 (EmbedVideo doesn't work with mw-collapsible class)
+* Fixed issue #50 ("arg" should be "args" in addService)
+* Added "inline" alignment option
+* Fixed center alignment option css
+* Auto Resize now targets mobile as well
+
+; v2.3.0
+* Hard cut off of support for versions older then MediaWiki 1.25
+* Auto Resize attribute added
+* Reverted array_key_exists() regression to fix the `<embedvideo>` tag being broken.
+
+; v2.2.9
+* Fixed issue with Twitch.tv switching over to HTTPS.
+* [https://github.com/HydraWiki/mediawiki-embedvideo/pull/52 Added support for http://media.ccc.de]
+* [https://github.com/HydraWiki/mediawiki-embedvideo/pull/46 New services can now be added from other extensions programmatically.]
+
+; v2.2.8
+* [https://github.com/HydraWiki/mediawiki-embedvideo/pull/38 Support for Daum TVPot]
+* [https://github.com/HydraWiki/mediawiki-embedvideo/pull/40 Fix for URL arguments for youtube and youtubeplaylist].
 * Support for Beam.pro.
 * Support for Hitbox.tv.
 
-===v2.2.7===
-* Compatible with Mediawiki 1.24.0+
- * https://github.com/Alexia/mediawiki-embedvideo/pull/35
+; v2.2.7
+* [https://github.com/HydraWiki/mediawiki-embedvideo/pull/35 Compatible with MediaWiki 1.24.0+]
 
-===v2.2.6===
+; v2.2.6
 * NicoNico Video ID fixes; will work with new ID formats.
 
-===v2.2.5===
+; v2.2.5
 * XSS flaws reported by [https://github.com/Mischanix/ Mischanix].
 
-===v2.2.4===
+; v2.2.4
 * Fix Bing to work with their new URLs.
 * Remove MSN as their new video service does not support embedding.
 * Standardize Tudou support per their wiki.
 
-===v2.2.3===
+; v2.2.3
 * Added support for Youku and Tudou.
 
-===v2.2.2===
+; v2.2.2
 * Updated regular expression replacement pattern for Twitch URLs.  Old Twitch embed URLs do not automatically redirect.
 
-===v2.2.1===
-* Fixed E_NOTICE being thrown for [https://github.com/Alexia/mediawiki-embedvideo/issues/25 undefined array indexes].
-* Back ported some [https://github.com/Alexia/mediawiki-embedvideo/issues/23 PHP 5.3 compatibility changes].  Please note that future releases of EmbedVideo may not support PHP 5.3 as it is an outdated version.  Upgrading to PHP 5.4 at a minimum is recommended.
+; v2.2.1
+* Fixed E_NOTICE being thrown for [https://github.com/HydraWiki/mediawiki-embedvideo/issues/25 undefined array indexes].
+* Back ported some [https://github.com/HydraWiki/mediawiki-embedvideo/issues/23 PHP 5.3 compatibility changes].  Please note that future releases of EmbedVideo may not support PHP 5.3 as it is an outdated version.  Upgrading to PHP 5.4 at a minimum is recommended.
 
-===v2.2.0===
-* Fixed a bug with alignment that would cause the left align to not work similar to how Mediawiki handles images and other media.
+; v2.2.0
+* Fixed a bug with alignment that would cause the left align to not work similar to how MediaWiki handles images and other media.
 * New parser tag better suited for templates; #evt.
 * New HTML like tag format that can take parameters.
 
-===v2.1===
+; v2.1.0
 * The width parameter was changed to dimensions.  See parameter documentation above.
-* New container parameter to use a standard Mediawiki thumb frame or default to a generic container.
+* New container parameter to use a standard MediaWiki thumb frame or default to a generic container.
 * The description parameter no longer forces the thumb frame to be used.
 * Added support for Archive.org, Blip.tv, CollegeHumor, Gfycat, Nico Nico Video, TED Talks, and Vine.
 * Ability to center align embeds.
 * CSS resource module.
 
-===v2.0===
+; v2.0
 * URLs from the player pages that contain the raw video ID can now be used as the ID parameter.
 * Validation of the raw IDs is improved.
 * Code base rewritten to have a VideoService class for future extensibility.
@@ -370,7 +450,7 @@ And then call it like this:
 
 ===Reporting Bugs===
 
-There is an issue tracker set up on the [https://github.com/Alexia/mediawiki-embedvideo/issues Github project page].
+There is an issue tracker set up on the [https://github.com/HydraWiki/mediawiki-embedvideo/issues Github project page].
 
 ===Contributing===
 

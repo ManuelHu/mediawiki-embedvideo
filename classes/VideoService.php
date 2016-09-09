@@ -107,7 +107,7 @@ class VideoService {
 				'#dailymotion\.com/(?:video|embed/video)/([a-zA-Z0-9]+)(?:_\S+?)?#is'
 			],
 			'id_regex'		=> [
-				'#^([a-zA-Z0-9]+)(?:_\S+?)#is'
+				'#^([a-zA-Z0-9]+)(?:_\S+?)?#is'
 			]
 		],
 		'divshare' => [
@@ -151,6 +151,18 @@ class VideoService {
 				'#^([\d\w]+)$#is'
 			]
 		],
+		'jwplayer' => [
+			'embed'			=> '<iframe src="//content.jwplatform.com/players/%1$s.html" width="%2$d" height="%3$d" frameborder="0" allowfullscreen="true"></iframe>',
+			'default_width'	=> 640,
+			'default_ratio'	=> 1.77777777777778, // (16 / 9)
+			'https_enabled'	=> true,
+			'url_regex'		=> [
+				'#content\.jwplatform\.com/players/([a-zA-Z0-9]+-[a-zA-Z0-9]+)(?:.)?#is'
+			],
+			'id_regex'		=> [
+				'#([a-zA-Z0-9]+-[a-zA-Z0-9]+)#is'
+			]
+		],
 		'kickstarter' => [
 			'embed'			=> '<iframe src="//www.kickstarter.com/projects/%1$s/widget/video.html" width="%2$d" height="%3$d" frameborder="0" allowfullscreen="true"></iframe>',
 			'default_width'	=> 640,
@@ -161,6 +173,18 @@ class VideoService {
 			],
 			'id_regex'		=> [
 				'#^([\d\w-]+/[\d\w-]+)$#is'
+			]
+		],
+		'mediacccde' => [
+			'embed'     => '<iframe src="https://media.ccc.de/v/%1$s/oembed" width="%2$d" height="%3$d" frameborder="0" allowfullscreen="true" scrolling="no"></iframe>',
+			'default_width' => 660,
+			'default_ratio' => 1.77777777777778, //(16 / 9),
+			'https_enabled' => true,
+			'url_regex' => [
+				'#conferences/.*?([\d\w_-]+)(?:/oembed)?.html$#is'
+			],
+			'id_regex'    => [
+				'#^([\d\w_-]+)$#is'
 			]
 		],
 		'metacafe' => [
@@ -176,7 +200,7 @@ class VideoService {
 			]
 		],
 		'nico' => [
-			'embed'			=> '<script type="text/javascript" src="http://ext.nicovideo.jp/thumb_watch/%1$s?w=%2$d&h=%3$d"></script>',
+			'embed'			=> '<iframe srcdoc="&lt;script type=&quot;text/javascript&quot; src=&quot;http://ext.nicovideo.jp/thumb_watch/%1$s?w=%2$d&amp;h=%3$d&quot;&gt;&lt;/script&gt;" width="%2$d" height="%3$d" frameborder="0" allowFullScreen="true"></iframe>',
 			'default_width'	=> 640,
 			'default_ratio'	=> 1.59609120521173, // (490 / 307)
 			'https_enabled'	=> false,
@@ -223,8 +247,20 @@ class VideoService {
 				'#^([\d\w\-]+)$#is'
 			]
 		],
+		'tubitv' => [
+			'embed'			=> '<iframe src="//tubitv.com/embed/%1$s" width="%2$d" height="%3$d" frameborder="0" allowfullscreen="true"></iframe>',
+			'default_width'	=> 640,
+			'default_ratio'	=> 1.77777777777778, // (640 / 360)
+			'https_enabled'	=> true,
+			'url_regex'		=> [
+				'#tubitv.com/(?:video|embed)/([\d]+)(/[\w-]+)?$#is',
+			],
+			'id_regex'		=> [
+				'#^([\d]+)$#is'
+			]
+		],
 		'tudou' => [
-			'embed'			=> '<iframe src="http://www.tudou.com/programs/view/html5embed.action?code=%1$s&autoPlay=false&playType=AUTO" allowfullscreen="true" width="%2$d" height="%3$d"></iframe>',
+			'embed'			=> '<iframe src="http://www.tudou.com/programs/view/html5embed.action?code=%1$s&autoPlay=false&playType=AUTO" allowfullscreen="true" width="%2$d" height="%3$d" frameborder="0"></iframe>',
 			'default_width'	=> 640,
 			'default_ratio'	=> 1.6,
 			'https_enabled'	=> false,
@@ -249,7 +285,7 @@ class VideoService {
 			]
 		],
 		'twitch' => [
-			'embed'			=> '<iframe src="http://www.twitch.tv/%1$s/embed" width="%2$d" height="%3$d" frameborder="0" allowfullscreen="true"></iframe>',
+			'embed'			=> '<iframe src="https://player.twitch.tv/?channel=%1$s" width="%2$d" height="%3$d" frameborder="0" allowfullscreen="true"></iframe>',
 			'default_width'	=> 640,
 			'default_ratio'	=> 1.64021164021164, // (620 / 378)
 			'https_enabled'	=> false,
@@ -286,7 +322,7 @@ class VideoService {
 		'vimeo' => [
 			'embed'			=> '<iframe src="//player.vimeo.com/video/%1$s" width="%2$d" height="%3$d" frameborder="0" allowfullscreen="true"></iframe>',
 			'default_width'	=> 640,
-			'default_ratio' => 1.2994923857868, // (640 / 493)
+			'default_ratio' => 1.77777777777778, // (640 / 360)
 			'https_enabled'	=> true,
 			'url_regex'		=> [
 				'#vimeo\.com/([\d]+)#is',
@@ -462,7 +498,7 @@ class VideoService {
 		if ( isset( self::$services[$service] ) ) {
 			throw new MWException( "Service already already exists: $service" );
 		}
-		self::$services[$service] = $arg;
+		self::$services[$service] = $args;
 	}
 
 	/**

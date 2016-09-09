@@ -1,4 +1,45 @@
 ##Patch Notes
+
+###v2.4.1
+* Merged Sophivorus' improvements and fixes.
+ * Support for TubiTV.com with the tubitv service identifier.
+ * Fixed vimeo aspect ratio.
+ * Fixed dailymotion ID regex.
+* Fixed error messages being double parsed.
+
+###v2.4.0
+* New media handlers to embed locally uploaded video and audio files.
+ * Requires ffmpeg and ffprobe binaries to be installed.
+ * Uses HTML5 <video> and <audio> tags.
+* Two new settings:
+ * $wgFFmpegLocation - Set the location of the ffmpeg binary.
+ * $wgFFprobeLocation - Set the location of the ffprobe binary.
+
+###v2.3.3
+* Support for JW Player.
+
+###v2.3.2
+* Fix auto resize breaking when leaving full screen.
+
+###v2.3.1
+* Fixed issue #54 (EmbedVideo doesn't work with mw-collapsible class)
+* Fixed issue #50 ("arg" should be "args" in addService)
+* Added "inline" alignment option
+* Fixed center alignment option css
+* Auto Resize now targets mobile as well
+
+###v2.3.0
+* Hard cut off of support for versions older then MediaWiki 1.25
+* Auto Resize attribute added
+* Reverted array_key_exists() regression to fix the `<embedvideo>` tag being broken.
+
+###v2.2.9
+* Fixed issue with Twitch.tv switching over to HTTPS.
+* Added support for http://media.ccc.de
+ * https://github.com/HydraWiki/mediawiki-embedvideo/pull/52
+* New services can now be added from other extensions programmatically.
+ * https://github.com/HydraWiki/mediawiki-embedvideo/pull/46
+
 ###v2.2.8
 * Support for Daum TVPot
  * https://github.com/Alexia/mediawiki-embedvideo/pull/38
