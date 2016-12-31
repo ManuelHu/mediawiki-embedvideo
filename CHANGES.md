@@ -1,5 +1,19 @@
 ##Patch Notes
 
+###v2.5.2
+* If ffmpeg is not installed on the server the FFProbe class will no longer attempt to use and instead just return generic descriptions.
+* Fixed properties on FFProbe being incorrectly declared as static.
+* Fixed issues with not returning generic descriptions when the local file being accessed by ffprobe is not readable.
+
+###v2.5.1
+* Added URL argument support to Twitch services.
+
+###v2.5.0
+* Added support for VideoLink tags
+* Support for Disclose.tv added
+* Twitch VOD support updated.
+* Added #evu parser tag
+
 ###v2.4.1
 * Merged Sophivorus' improvements and fixes.
  * Support for TubiTV.com with the tubitv service identifier.
